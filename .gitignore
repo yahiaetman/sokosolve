@@ -1,0 +1,9 @@
+# Buid Files
+build/*
+Release/*
+
+*.egg-info
+__pycache__
+
+#CFFI Generated Files
+_sokosolve*
