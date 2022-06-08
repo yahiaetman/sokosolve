@@ -1,5 +1,9 @@
-# Buid Files
+#settings
+.vscode/*
+
+# Build Files
 build/*
+build_test/*
 Release/*
 
 *.egg-info

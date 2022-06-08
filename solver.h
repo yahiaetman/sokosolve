@@ -21,7 +21,8 @@ struct context_t* create_context(unsigned char width, unsigned char height, size
 void free_context(struct context_t* context);
 
 struct problem_t* allocate_problem(struct context_t* context);
-bool parse_problem(struct context_t* context, struct problem_t* problem, char* level_str);
+bool parse_problem(struct context_t* context, struct problem_t* problem, const char* level_str);
+char* format_problem(struct context_t* context, struct problem_t* problem, const char* separator);
 void free_problem(struct problem_t* problem);
 
 

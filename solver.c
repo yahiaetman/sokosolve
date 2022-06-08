@@ -64,8 +64,8 @@ void heapify_bottomup(state_t** min_heap, size_t node_index, size_t size){
         size_t parent_index = node_index >> 1;
         state_t* parent = min_heap[parent_index];
         if(last->priority < parent->priority){
-            last->heap_index = parent_index;
-            parent->heap_index = node_index;
+            last->heap_index = (index_t)parent_index;
+            parent->heap_index = (index_t)node_index;
             min_heap[parent_index] = last;
             min_heap[node_index] = parent;
             node_index = parent_index;
@@ -87,8 +87,8 @@ void heapify_topdown(state_t** min_heap, size_t root_index, size_t size){
         }
         state_t* child = min_heap[min_child_index];
         if(child->priority < root->priority){
-            child->heap_index = root_index;
-            root->heap_index = min_child_index;
+            child->heap_index = (index_t)root_index;
+            root->heap_index = (index_t)min_child_index;
             min_heap[root_index] = child;
             min_heap[min_child_index] = root;
             root_index = min_child_index;
@@ -100,7 +100,7 @@ void heapify_topdown(state_t** min_heap, size_t root_index, size_t size){
 
 void heap_insert(state_t** min_heap, state_t* element, size_t *size){
     size_t index = *size;
-    element->heap_index = index;
+    element->heap_index = (index_t)index;
     min_heap[index] = element;
     if(index > 0) heapify_bottomup(min_heap, index, ++(*size));
     else ++(*size);
@@ -251,10 +251,10 @@ bool check_single_2x2_deadlock(struct context_t* context, struct problem_t* prob
     return false;
 }
 
-void show_level(struct context_t* context_t, bits_t *crates, bits_t *goals, bits_t *walls, pos_t player){
+void show_level(struct context_t* context, bits_t *crates, bits_t *goals, bits_t *walls, pos_t player){
     pos_t position = 0;
-    for(len_t y = 0; y < context_t->height; ++y){
-        for(len_t x = 0; x < context_t->width; ++x){
+    for(len_t y = 0; y < context->height; ++y){
+        for(len_t x = 0; x < context->width; ++x){
             char c = '.';
             if(get_bit(walls, position)) c = 'W';
             else if(get_bit(goals, position)){
@@ -284,7 +284,34 @@ void show_bits(struct context_t* context_t, bits_t *bits){
     }
 }
 
-bool parse_problem(struct context_t* context, struct problem_t* problem, char* level_str){
+char* format_problem(struct context_t* context, struct problem_t* problem, const char* separator){
+    size_t sep_len = separator ? strlen(separator) : 0;
+    size_t total_len = context->height * (context->width + sep_len) - sep_len + 1;
+    char* result = (char*)malloc(total_len * sizeof(char));
+    pos_t position = 0;
+    size_t index = 0;
+    for(len_t y = 0; y < context->height; ++y){
+        if(y) for(size_t i = 0; i < sep_len; ++i) result[index++] = separator[i];
+        for(len_t x = 0; x < context->width; ++x){
+            char c = '.';
+            if(get_bit(problem->walls, position)) c = 'W';
+            else if(get_bit(problem->goals, position)){
+                c = '0';
+                if(problem->player == position) c = '+';
+                else if(get_bit(problem->crates, position)) c = 'g';
+            } else {
+                if(problem->player == position) c = 'A';
+                else if(get_bit(problem->crates, position)) c = '1';
+            }
+            result[index++] = c;
+            ++position;
+        }
+    }
+    result[index] = 0;
+    return result;
+}
+
+bool parse_problem(struct context_t* context, struct problem_t* problem, const char* level_str){
     memset(problem->walls, ~0, context->bitset_stride);
     memset(problem->goals, 0, context->bitset_stride);
     memset(problem->crates, 0, context->bitset_stride);
@@ -433,7 +460,7 @@ inline
 cost_t compute_heuristic(struct context_t* context, struct problem_t* problem, state_t* state){
     cost_t h = 0;
     for(unsigned int position = 0; position < context->area; ++position){
-        if(get_bit(problem->crates, position)) h += problem->heuristics[position];
+        if(get_bit(state->crates, position)) h += problem->heuristics[position];
     }
     return h;
 }
@@ -507,9 +534,15 @@ result_t solve_astar(struct context_t* context, struct problem_t* problem, float
             }
             //if(changed) show_level(context, crates, goals, walls, player);
             if(changed && bitset_equals(crates, problem->goals, context->bitset_size)){
-                action_t* solution = (action_t*)malloc((cost + 1) * sizeof(action_t));
-                solution[cost] = 0;
-                int index = cost - 1;
+                int solution_length = 0;
+                state_t* pointer = parent;
+                while(pointer){
+                    ++solution_length;
+                    pointer = pointer->parent;
+                }
+                action_t* solution = (action_t*)malloc((solution_length + 1) * sizeof(action_t));
+                solution[solution_length] = 0;
+                int index = solution_length - 1;
                 solution[index--] = action;
                 while (index >= 0)
                 {
