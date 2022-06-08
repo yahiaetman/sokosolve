@@ -1,6 +1,13 @@
 # sokosolve
 A small C solver for Sokoban with a Python Binding using CFFI
 
+It was created to be used in experiments for the paper:
+
+> **Procedural Level Generation for Sokoban via Deep Learning: An Experimental Study**
+>Yahia Zakaria, Magda Fayek, Mayada Hadhoud
+ 
+Paper Link: [https://ieeexplore.ieee.org/abstract/document/9779063](https://ieeexplore.ieee.org/abstract/document/9779063)
+
 ## Installation
 
 ```sh
