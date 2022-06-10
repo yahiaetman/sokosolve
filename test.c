@@ -54,12 +54,12 @@ void run_test_case_set(const test_case_set_t* set){
             printf("%s\n", formatted_problem);
             free(formatted_problem);
 
-            printf("\n");
-            test_bfs(context, problem, set->max_iterations);
-            printf("\n");
-            test_astar(context, problem, 0.0f, 1.0f, set->max_iterations);
-            printf("\n");
-            test_astar(context, problem, 1.0f, 1.0f, set->max_iterations);
+            // printf("\n");
+            // test_bfs(context, problem, set->max_iterations);
+            // printf("\n");
+            // test_astar(context, problem, 0.0f, 1.0f, set->max_iterations);
+            // printf("\n");
+            // test_astar(context, problem, 1.0f, 1.0f, set->max_iterations);
             printf("\n");
             test_astar(context, problem, 1.0f, 0.0f, set->max_iterations);
             printf("\n");
@@ -80,20 +80,25 @@ int main(){
     printf("Testing levels of size 4x4...\n\n");
 
     char* levels_4x4[] = {
-        "...."
+        // "...."
+        // "..+."
+        // ".11."
+        // "....",
+
+        // "..0."
+        // "..+."
+        // ".1.1"
+        // ".WW.",
+
+        "..0."
         "..+."
         ".11."
         "....",
 
-        "..0."
-        "..+."
-        ".1.1"
-        ".WW.",
-
-        "..0."
-        "..+."
-        ".11."
-        "....",
+        // ".Wg."
+        // "gW.."
+        // ".WWW"
+        // "A.10",
 
         NULL
     };
@@ -107,63 +112,63 @@ int main(){
 
     run_test_case_set(&set_4x4);
 
-    /////////////////////////////////
+    // /////////////////////////////////
 
-    printf("Testing levels of size 7x7...\n\n");
+    // printf("Testing levels of size 7x7...\n\n");
 
-    char* levels_7x7[] = {
-        "......."
-        "......."
-        "......."
-        ".A.1.0."
-        "......."
-        "......."
-        ".......",
+    // char* levels_7x7[] = {
+    //     ".W.....\n"
+    //     ".W.....\n"
+    //     ".W.....\n"
+    //     "AW.1.0.\n"
+    //     ".W.....\n"
+    //     ".W.....\n"
+    //     ".W.....",
 
-        "0......"
-        "..0...0"
-        "..1.W.1"
-        "....W0."
-        "..11WWW"
-        "A...1.W"
-        "......0",
+    //     "0......"
+    //     "..0...0"
+    //     "..1.W.1"
+    //     "....W0."
+    //     "..11WWW"
+    //     "A...1.W"
+    //     "......0",
 
-        NULL
-    };
+    //     NULL
+    // };
 
-    test_case_set_t set_7x7 = {
-        .width = 7,
-        .height = 7,
-        .max_iterations = 10'000'000,
-        .levels = levels_7x7
-    };
+    // test_case_set_t set_7x7 = {
+    //     .width = 7,
+    //     .height = 7,
+    //     .max_iterations = 10'000'000,
+    //     .levels = levels_7x7
+    // };
 
-    run_test_case_set(&set_7x7);
+    // run_test_case_set(&set_7x7);
 
-    /////////////////////////////////
+    // /////////////////////////////////
 
-    printf("Testing levels of size 9x9...\n\n");
+    // printf("Testing levels of size 9x9...\n\n");
 
-    char* levels_9x9[] = {
-        "WWgWW.g.."
-        ".W..g...."
-        ".....1.W."
-        "..g..10W."
-        "g...W..0."
-        "W..WW.W.."
-        "W.g.WA..."
-        ".g...1g0."
-        "W........",
+    // char* levels_9x9[] = {
+    //     "WWgWW.g.."
+    //     ".W..g...."
+    //     ".....1.W."
+    //     "..g..10W."
+    //     "g...W..0."
+    //     "W..WW.W.."
+    //     "W.g.WA..."
+    //     ".g...1g0."
+    //     "W........",
 
-        NULL
-    };
+    //     NULL
+    // };
 
-    test_case_set_t set_9x9 = {
-        .width = 9,
-        .height = 9,
-        .max_iterations = 10'000'000,
-        .levels = levels_9x9
-    };
+    // test_case_set_t set_9x9 = {
+    //     .width = 9,
+    //     .height = 9,
+    //     .max_iterations = 10'000'000,
+    //     .levels = levels_9x9
+    // };
 
-    run_test_case_set(&set_9x9);
+    // run_test_case_set(&set_9x9);
 }

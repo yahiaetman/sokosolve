@@ -8,6 +8,19 @@ It was created to be used in experiments for the paper:
  
 Paper Link: [https://ieeexplore.ieee.org/abstract/document/9779063](https://ieeexplore.ieee.org/abstract/document/9779063)
 
+## Purpose
+
+Originally, this solver was written to be a faster alternative to the Sokoban solver provided in [gym-pcgrl](https://github.com/amidos2006/gym-pcgrl). This allows training PCGRL to generate larger Sokoban levels as shown in [our paper](https://ieeexplore.ieee.org/abstract/document/9779063).
+
+**Advantages of `sokosolve`**:
+* It is fast (at least relative to the python solver in gym-pcgrl).
+* It is written in `c` so it should be easy to make bindings for it in other languages.
+  
+**Disadvantages of `sokosolve`**:
+* It preallocate most of the memory it needs before running. So it can consume a significant portion of memory when the maximum iterations is set to a high value.
+* A capacity and a maximum iteration limit must be given to the solver.
+* The heuristic is quite simple and not tight.
+
 ## Installation
 
 ```sh
@@ -16,7 +29,11 @@ cd sokosolve
 pip install -e .
 ```
 
-## How to Use
+This package has been tested on:
+* Windows 10/11
+* Linux (Ubuntu 20.04 LTS).
+
+## Usage
 
 ```python
 from sokosolve import SokobanSolver
@@ -112,6 +129,8 @@ print(" - Iteration Limit Exceeded?", result.limit_exceeded)
 ```
 
 
-## Used Libraries
+## Acknowledgments
 
-* [hashmap.c](https://github.com/tidwall/hashmap.c) by [tidwall](https://github.com/tidwall).
+* [gym-pcgrl](https://github.com/amidos2006/gym-pcgrl)
+* [cffi](https://cffi.readthedocs.io/en/latest/)
+* [hashmap.c](https://github.com/tidwall/hashmap.c)
