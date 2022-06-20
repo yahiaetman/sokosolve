@@ -1,0 +1,36 @@
+# U means Uncompilable
+# C means Compilable but Unsolvable
+# S(N) means Solvable in N steps (N=_ if we don't care about the solution length) 
+
+....
+..+.
+.11.
+....
+; BFS(10000) = U
+
+..0.
+..+.
+.1.1
+.WW.
+; BFS(10000) = C
+; A*(0,1,10000) = C
+; A*(1,1,10000) = C
+; A*(1,0,10000) = C
+
+..0.
+..+.
+.11.
+....
+; BFS(10000) = S(12)
+; A*(0,1,10000) = S(12)
+; A*(1,1,10000) = S(12)
+; A*(1,0,10000) = S(_)
+
+.Wg.
+gW..
+.WWW
+A.10
+; BFS(10000) = S(2)
+; A*(0,1,10000) = S(2)
+; A*(1,1,10000) = S(2)
+; A*(1,0,10000) = S(_)

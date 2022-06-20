@@ -9,5 +9,8 @@ Release/*
 *.egg-info
 __pycache__
 
+#Testing files
+Testing/*
+
 #CFFI Generated Files
 _sokosolve*

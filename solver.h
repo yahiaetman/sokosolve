@@ -117,5 +117,10 @@ void free_result(result_t result);
 // free_problem(problem);
 // free_context(context);
 
+#ifdef SOKOSOLVE_IMPLEMENTATION
+#undef SOKOSOLVE_IMPLEMENTATION
+#include "solver.c"
+#endif
+
 
 #endif
