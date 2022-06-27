@@ -317,6 +317,39 @@ bool check_single_2x2_deadlock(struct context_t* context, struct problem_t* prob
     return false;
 }
 
+// Check that in the initial state, no crate is stuck in a 2x2 deadlock with the adjacent walls or crates
+inline
+bool check_all_2x2_deadlock(struct context_t* context, struct problem_t* problem){
+    // Compute and store the directions to all the 2x2 neighborhood
+    dir_t neighborhood[4];
+    neighborhood[0] = 0;
+    neighborhood[1] = 1;
+    neighborhood[2] = context->width;
+    neighborhood[3] = context->width + 1;
+
+    // loop over all 2x2 windows   
+    pos_t position = 0;
+    for(pos_t y = 0, y_end = context->height - 1; y < y_end; ++y){
+        for(pos_t x = 0, x_end = context->width - 1; x < x_end; ++x){
+            count_t unsafe = 0; // Count the number of crates that would be stuck if the 2x2 pattern is complete
+            // Loop over the 2x2 neighborhood
+            for(int index = 0; index < 4; ++index){
+                pos_t neighbor = position + neighborhood[index];
+                bool has_crate = get_bit(problem->crates, neighbor), has_wall = get_bit(problem->walls, neighbor);
+                // If this tile is empty (no wall or crate), we are safe (for now)
+                if(!(has_crate || has_wall)) { unsafe = 0; break; }
+                // If there is a crate but without a goal, it is unsafe
+                if(has_crate && !get_bit(problem->goals, neighbor)) ++unsafe;
+            }
+            // If the 2x2 pattern is complete and it contains unsafe crates, the level cannot be solved
+            if(unsafe) return true;        
+            ++position;
+        }
+        ++position; // Skip the end of row
+    }
+    return false;
+}
+
 // Print a state onto the console
 // Used for debugging.
 void show_level(struct context_t* context, bits_t *crates, bits_t *goals, bits_t *walls, pos_t player){
@@ -456,6 +489,10 @@ bool parse_problem(struct context_t* context, struct problem_t* problem, const c
     // Check that the level is compilable
     bool valid = player_count == 1 && (goal_count == crate_count) && !bitset_equals(problem->crates, problem->goals, context->bitset_size);
     problem->compilable = valid;
+    // Check that no 2x2 deadlock patterns exist
+    if(valid){
+        valid = !check_all_2x2_deadlock(context, problem);
+    }
     // Compute the deadlock map (and heuristic map) and check that all the crates can potentially reach a goal
     if(valid){
         generate_deadlock_map(context, problem);
