@@ -72,7 +72,9 @@ class SokobanSolver:
             The maximum number of states that the solver can generate
         """
         self.__context = lib.create_context(width, height, capacity)
+        if self.__context == ffi.NULL: raise MemoryError("Failed to allocate context")
         self.__problem = lib.allocate_problem(self.__context)
+        if self.__context == ffi.NULL: raise MemoryError("Failed to allocate problem")
     
     def __del__(self):
         """Delete the solver

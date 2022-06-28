@@ -2,6 +2,17 @@
 # C means Compilable but Unsolvable
 # S(N) means Solvable in N steps (N=_ if we don't care about the solution length) 
 
+.w.wwwgw.ww
+.www.wgww.w
+...10ggw..w
+w.0000g0w..
+w.1111g1.w.
+w.....0..1A
+; BFS(1000000) = S(59)
+; A*(0,1,1000000) = S(59)
+; A*(1,1,1000000) = S(59)
+; A*(1,0,1000000) = S(_)
+
 ..A.
 .11.
 .00.
